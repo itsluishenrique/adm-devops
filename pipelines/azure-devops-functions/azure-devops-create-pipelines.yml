@@ -1,0 +1,31 @@
+parameters:
+- name: pipeName
+  displayName: 'Pipeline name (comma-separated values, e.g., {projeto}-{pipe_type}-{pipe_name}-snapshot.yml, {projeto}-{pipe_type}-{pipe_name}-release.yml)'
+  default: ''
+
+trigger:
+- none
+
+pool:
+  name: 'buildpool'
+
+jobs:
+- job: new_pipeline
+  displayName: 'New Pipeline'
+  variables:
+    - name: PIPE_LIST
+      value: ${{ parameters.pipeName }}
+  steps:
+  - ${{ each pipe in split(variables.PIPE_LIST, ',')}}:
+    - task: Bash@3
+      displayName: 'Pipeline: ${{ pipe }}'
+      inputs:
+        filePath: 'templates/functions/azure-pipelines.sh'
+      env:
+        PIPE_NAME: ${{ pipe }}
+        REPO_NAME: ''
+        AZ_TOKEN: $(azToken)
+        AZ_ORG: 'https://dev.azure.com/${{ organizacao }}'
+        AZ_PRJ: '${{ projeto }}'
+        http_proxy: $(PROXY_APP)
+        https_proxy: $(PROXY_APP)

@@ -1,0 +1,30 @@
+parameters:
+- name: repoName
+  displayName: 'Repository name (comma-separated values, e.g., {projeto}-{repo_name}, {projeto}-{repo_name})'
+  default: ''
+
+trigger:
+- none
+
+pool:
+  name: 'buildpool'
+
+jobs:
+- job: new_repository
+  displayName: 'New Repository'
+  variables:
+    - name: REPO_LIST
+      value: ${{ parameters.repoName }}
+  steps:
+  - ${{ each repo in split(variables.REPO_LIST, ',')}}:
+    - task: Bash@3
+      displayName: 'Repository: ${{ repo }}'
+      inputs:
+        filePath: 'templates/functions/azure-repos.sh'
+      env:
+        REPO_NAME: ${{ repo }}
+        AZ_TOKEN: $(azToken)
+        AZ_ORG: 'https://dev.azure.com/${{ organizacao }}'
+        AZ_PRJ: '${{ projeto }}'
+        http_proxy: $(PROXY_APP)
+        https_proxy: $(PROXY_APP)
