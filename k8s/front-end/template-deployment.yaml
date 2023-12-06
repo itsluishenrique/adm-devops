@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: $k8sapplicationname
+  labels:
+   app: $k8sapplicationname
+   service: $k8sapplicationname
+spec:
+  ports:
+  - port: $k8sport
+    name: http
+  selector:
+    app: $k8sapplicationname
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: $k8sapplicationname
+  labels:
+    account: $k8sapplicationname
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $k8sapplicationname
+  labels:
+    app: $k8sapplicationname
+    version: $k8simageversion
+spec:
+  replicas: $k8sdeploymentreplicas
+  selector:
+    matchLabels:
+      app: $k8sapplicationname
+      version: $k8simageversion
+  template:
+    metadata:
+      labels:
+        app: $k8sapplicationname
+        version: $k8simageversion
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+    spec:
+      serviceAccountName: $k8sapplicationname
+      containers:
+      - name: $k8sapplicationname
+        image: $k8sdeploymentrepository/$k8snamespace/$k8sapplicationname:$k8simageversion
+        ports:
+        - containerPort: $k8sport
+        resources:
+          requests:
+            cpu: $k8sdeploymentcpu
+            memory: $k8sdeploymentmemory
+        terminationMessagePolicy: File
+        imagePullPolicy: Always
+        envFrom:
+          - configMapRef:
+              name: configmap-$k8sapplicationname
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - $k8sapplicationname
+                topologyKey: kubernetes.io/hostname
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

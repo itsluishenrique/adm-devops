@@ -1,0 +1,12 @@
+kind: ConfigMap
+metadata:
+  name: "configmap-$k8sapplicationname"
+  namespace: "$k8snamespace"
+apiVersion: v1
+data:
+  ENV: "$k8s_env"
+  AKS_HOST: "$k8shostaks"
+  APPLICATIONINSIGHTS_CONNECTION_STRING: "$k8sappinsights"
+  APPLICATIONINSIGHTS_INSTRUMENTATION_LOGGING_LEVEL: TRACE
+  REACT_APP_BASE_URL: "$k8s_react_app_base_url"
+  REACT_APP_PATH: "$k8s_react_app_path"

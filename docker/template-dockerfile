@@ -1,0 +1,24 @@
+FROM "${IMAGE_DOCKER_URL}"
+
+USER root
+
+ARG APP_INSIGHTS_ROLE_NAME="$k8sapplicationname"
+
+ENV APPLICATIONINSIGHTS_CONNECTION_STRING="${APP_INSIGHTS_CONN_STRING}"
+ENV APPLICATIONINSIGHTS_ROLE_NAME="${APP_INSIGHTS_ROLE_NAME}"
+ENV APPLICATIONINSIGHTS_INSTRUMENTATION_LOGGING_LEVEL="${APP_INSTRUMENTATION_LOGGING_LEVEL}"
+
+RUN java --version
+
+RUN cat /etc/issue
+
+RUN mkdir -p /var/log/$k8sapplicationname
+
+WORKDIR /app
+
+COPY $k8sapplicationname/target/*.jar /app/$k8sapplicationname.jar
+
+ENTRYPOINT java -noverify -XX:TieredStopAtLevel=1 \
+    -Djava.security.egd=file:/dev/./urandom \
+    -javaagent:/opt/devops_aux/applicationinsights-agent-3.2.3.jar \
+    -jar "/app/$k8sapplicationname.jar"

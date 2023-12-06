@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: $k8sapplicationname
+  namespace: $k8snamespace
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: $k8sapplicationname
+  minReplicas: $k8sminreplicas
+  maxReplicas: $k8smaxreplicas
+  targetCPUUtilizationPercentage: $k8stargetcpuutilizationpercentage

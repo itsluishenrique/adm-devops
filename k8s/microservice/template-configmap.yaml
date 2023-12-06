@@ -1,0 +1,25 @@
+kind: ConfigMap
+metadata:
+  name: "configmap-$k8sapplicationname"
+  namespace: "$k8snamespace"
+apiVersion: v1
+data:
+  ENV: "$k8s_env"
+  AKS_HOST: "$k8shostaks"
+  MONGO_PROTOCOL: "$k8smongoprotocol"
+  MONGO_USER: "$k8smongouser"
+  MONGO_HOST: "$k8smongohost"
+  MONGO_PORT: "$k8smongoport"
+  MONGO_DB: "$k8smongodb"
+  MONGO_QUERY_STRING: "$k8smongoquerystring"
+  REDIS_HOST: "$k8sredishost"
+  REDIS_PORT: "$k8sredisport"
+  REDIS_SSL: "$k8sredisssl"
+  CACHE_ENABLED: "$k8sredisenabled"
+  APPLICATION_CONTEXT: "/$k8sapplicationname"
+  APPLICATIONINSIGHTS_CONNECTION_STRING: "$k8sappinsights"
+  APPLICATIONINSIGHTS_INSTRUMENTATION_LOGGING_LEVEL: TRACE
+  SQLSERVER_USER: "$k8ssqlserveruser"
+  SQLSERVER_HOST: "$k8ssqlserverhost"
+  SQLSERVER_DATABASE: "$k8ssqlserverdatabase"
+  SQLSERVER_PORT: "$k8ssqlserverport"

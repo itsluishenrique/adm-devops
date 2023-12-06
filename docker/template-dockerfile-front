@@ -1,0 +1,40 @@
+FROM "${IMAGE_DOCKER_URL}"
+
+USER root
+
+ARG APP_INSIGHTS_ROLE_NAME="$k8sapplicationname"
+
+ENV APPLICATIONINSIGHTS_CONNECTION_STRING="${APP_INSIGHTS_CONN_STRING}"
+ENV APPLICATIONINSIGHTS_ROLE_NAME="${APP_INSIGHTS_ROLE_NAME}"
+ENV APPLICATIONINSIGHTS_INSTRUMENTATION_LOGGING_LEVEL="${APP_INSTRUMENTATION_LOGGING_LEVEL}"
+
+RUN httpd -v
+
+RUN cat /etc/issue
+
+RUN mkdir -p /var/log/$k8sapplicationname
+
+# Altera as permissões dos arquivos dentro da pasta do Apache2
+RUN chmod -R 755 /usr/local/apache2/htdocs/
+
+# Apaga o index.html default gerado pelo Apache2
+RUN rm -rf /usr/local/apache2/htdocs/index.html
+
+# Troca as variáveis dos templates para o nome do repositório do front-end
+RUN sed -i "s/K8S_APP_NAME/${k8sapplicationname}/g" /usr/local/apache2/conf/httpd.conf
+RUN sed -i "s/K8S_APP_NAME/${k8sapplicationname}/g" /usr/local/apache2/htdocs/$k8sapplicationname/.htaccess
+
+# Mostra os diretórios do Apache2 para confirmar se o binário do projeto foi gerado corretamente
+RUN cd /usr/local/apache2/conf/ && ls -la
+RUN cd /usr/local/apache2/htdocs/ && ls -la
+RUN cd /usr/local/apache2/htdocs/$k8sapplicationname/ && ls -la
+RUN cd /usr/local/apache2/htdocs/$k8sapplicationname/$k8sapplicationname/ && ls -la
+RUN cat /usr/local/apache2/htdocs/$k8sapplicationname/.htaccess
+
+EXPOSE 8080
+
+# Script para projetos React (manipular ambientes de back-end)
+COPY ["$k8sapplicationname/startup", "/usr/local/bin/startup"]
+RUN chmod +x /usr/local/bin/startup
+RUN cat /usr/local/bin/startup
+ENTRYPOINT ["startup"]
