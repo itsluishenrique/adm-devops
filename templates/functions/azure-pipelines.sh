@@ -26,9 +26,9 @@ else
   echo "BRANCH_NAME: ${BRANCH_NAME}"
 fi
 
-[[ ${PIPE_NAME} == *"lib"* ]] && export FOLDER_NAME="INGESTÃO/${FOLDER_NAME}"
+[[ ${PIPE_NAME} == *"lib"* ]] && export FOLDER_NAME="INGESTAO/${FOLDER_NAME}"
 
-[[ ${PIPE_NAME} == *"automacao"* ]] && export FOLDER_NAME="AUTOMAÇÃO"
+[[ ${PIPE_NAME} == *"automacao"* ]] && export FOLDER_NAME="AUTOMACAO"
 
 echo "FOLDER_NAME: ${FOLDER_NAME}" && echo ""
 

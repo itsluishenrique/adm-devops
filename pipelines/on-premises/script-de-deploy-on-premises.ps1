@@ -42,7 +42,7 @@ Write-Host "======================== Extrair pacote de deploy ==================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/01-extrair-zip.ps1 } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/01-extrair-zip.ps1 } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -58,7 +58,7 @@ Write-Host "======================== Gerar backup ==============================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/02-gerar-backup.bat } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/02-gerar-backup.bat } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -74,7 +74,7 @@ Write-Host "======================== Parar IIS =================================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/03-parar-iis.bat } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/03-parar-iis.bat } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -90,7 +90,7 @@ Write-Host "======================== Copiar arquivos ===========================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/04-copiar-arquivos.bat } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/04-copiar-arquivos.bat } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -106,7 +106,7 @@ Write-Host "======================== Atualizar app =============================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/05-atualizar-app.bat } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/05-atualizar-app.bat } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -122,7 +122,7 @@ Write-Host "======================== Atualizar banco de dados ==================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/06-atualizar-banco-de-dados.bat } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/06-atualizar-banco-de-dados.bat } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -138,7 +138,7 @@ Write-Host "======================== Iniciar IIS ===============================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/07-iniciar-iis.bat } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/07-iniciar-iis.bat } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
@@ -154,7 +154,7 @@ Write-Host "======================== Excluir pacote de deploy ==================
 Write-Host "======================================================================="
 
 try {
-    Invoke-Command -ComputerName $ip -ScriptBlock { /pipelines/templates/08-excluir-zip.ps1 } -Credential $deploy
+    Invoke-Command -ComputerName $ip -ScriptBlock { /templates/on-premises/08-excluir-zip.ps1 } -Credential $deploy
 }
 catch {
     Write-Host "=============== Ocorreu um erro ao realizar o processo ============"
